@@ -1,0 +1,54 @@
+.card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    
+}
+
+.card__container {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid #821B47;
+    border-radius: 5px;
+}
+
+.card__h2 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.3rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.card__p {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    text-align: justify;
+    margin: 30px 30px;
+    font-weight: bold;
+}
+
+.card__button {
+border: none;
+    background-color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    color: rgb(208, 45, 45);
+}
+
+.card__container:hover {
+    border: 4px solid #050505;
+}
+
+.card__container--corFundo {
+    background-color: black;
+    color: white;
+}
+
+.card__button--cor {
+    background: black;
+    color: white;
+}
