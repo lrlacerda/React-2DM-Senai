@@ -1,11 +1,14 @@
 import React from "react";
 import Header from "../../components/Header/Header";
+import Title from "../../components/Titulo/Title";
 import "./LoginPage.css";
 
 const LoginPage = () => {
     return (
         <div>
-            <h1>Login</h1>
+             <Title
+                titleText="Login"
+             />
         </div>
     );
 };
