@@ -10,10 +10,7 @@ const NextEvent = ({title, description, eventDate, idEvent}) => {
             <h2 className="event-card__title">{title}</h2>
             <p className="event-card__description">{description}</p>
             <p className="event-card__description">{eventDate}</p>
-            <a onClick={() => {conectar(idEvent)}} 
-            className="event-card__connect-link">
-                Conectar
-            </a>
+            <a onClick={() => {conectar(idEvent)}} className="event-card__connect-link">Conectar</a>
         </article>
     );
 };

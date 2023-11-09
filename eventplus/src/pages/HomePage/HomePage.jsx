@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./HomePage.css";
 import Banner from "../../components/Banner/Banner";
 import MainContent from "../../components/MainContent/MainContent";
@@ -7,48 +7,53 @@ import ContactSection from "../../components/ContactSection/ContactSection";
 import Title from "../../components/Titulo/Title";
 import NextEvent from "../../components/NextEvent/NextEvent";
 import Container from "../../components/Container/Container";
+import axios from "axios";
 
 const HomePage = () => {
-    return (
-        <div>
-            <MainContent>
-                <Banner />
-                <section className="proximos-eventos">
-                    <Container>
-                        <Title titleText={"Proximos Eventos"} />
-                        <div className="events-box">
-                            <NextEvent
-                                title={"Evento Musical"}
-                                description={"Banda Nocturna"}
-                                eventDate={"10/11/2023"}
-                                idEvent={""}
-                            />
-                            <NextEvent
-                                title={"Evento DJ"}
-                                description={"Evento com vários DJ"}
-                                eventDate={"12/11/2023"}
-                                idEvent={""}
-                            />
-                            <NextEvent
-                                title={"Evento Teatro"}
-                                description={"A Fantastica Fabrica"}
-                                eventDate={"20/11/2023"}
-                                idEvent={""}
-                            />
-                            <NextEvent
-                                title={"Evento Musical"}
-                                description={"Bandas de Rock"}
-                                eventDate={"26/11/2023"}
-                                idEvent={""}
-                            />
-                        </div>
-                    </Container>
-                </section>
+    //dados mocados
+    const [nextEvents, setnextEvents] = useState([]);
+    const urlLocal = "https://localhost:7118/api";
 
-                <VisionSection />
-                <ContactSection />
-            </MainContent>
-        </div>
+    //roda somente na inicialização do componente
+    useEffect(() => {
+        async function getNextEvents() {
+            try {
+                const promise = await axios.get(`${urlLocal}/Evento`);
+                const dados = await promise.data;
+
+                setnextEvents(dados); //atualiza o state
+            } catch (error) {
+                alert("Deu ruim na api!");
+            }
+        }
+
+        getNextEvents(); //doda a função
+    }, []);
+
+    return (
+        <MainContent>
+            <Banner />
+            <section className="proximos-eventos">
+                <Container>
+                    <Title titleText={"Proximos Eventos"} />
+                    <div className="events-box">
+                        {nextEvents.map((e) => {
+                            return (
+                                <NextEvent
+                                    key={e.idEvento}
+                                    title={e.nomeEvento}
+                                    description={e.descricao}
+                                    eventDate={e.dataEvento}
+                                />
+                            );
+                        })}
+                    </div>
+                </Container>
+            </section>
+
+            <VisionSection />
+            <ContactSection />
+        </MainContent>
     );
 };
 
