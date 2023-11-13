@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./HomePage.css";
+
 import Banner from "../../components/Banner/Banner";
 import MainContent from "../../components/MainContent/MainContent";
 import VisionSection from "../../components/VisionSection/VisionSection";
@@ -7,7 +8,10 @@ import ContactSection from "../../components/ContactSection/ContactSection";
 import Title from "../../components/Titulo/Title";
 import NextEvent from "../../components/NextEvent/NextEvent";
 import Container from "../../components/Container/Container";
-import axios from "axios";
+
+import api from "../../services/Service";
+
+import {nextEventResource} from '../../services/Service'
 
 const HomePage = () => {
     //dados mocados
@@ -18,7 +22,7 @@ const HomePage = () => {
     useEffect(() => {
         async function getNextEvents() {
             try {
-                const promise = await axios.get(`${urlLocal}/Evento`);
+                const promise = await api.get(`${nextEventResource}`);
                 const dados = await promise.data;
 
                 setnextEvents(dados); //atualiza o state
@@ -44,6 +48,7 @@ const HomePage = () => {
                                     title={e.nomeEvento}
                                     description={e.descricao}
                                     eventDate={e.dataEvento}
+                                    idEvent={e.idEvento}
                                 />
                             );
                         })}
