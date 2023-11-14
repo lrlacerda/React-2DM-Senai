@@ -1,4 +1,3 @@
-import { type } from "@testing-library/user-event/dist/type";
 import React from "react";
 import "./FormComponents.css";
 
@@ -7,10 +6,10 @@ export const Input = ({
     id,
     value,
     required,
-    additionalClass,
     name,
     placeholder,
     manipulationFunction,
+    additionalClass = "",
 }) => {
     return (
         <input
@@ -37,7 +36,7 @@ export const Button = (props) => {
             id={props.id}
             name={props.name}
             type={props.Type}
-            className={props.additionalClass}
+            className={`button-component ${props.additionalClass}`}
             onClick={props.manipulationFunction}
         >
             {props.textButton}
