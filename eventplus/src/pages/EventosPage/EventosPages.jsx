@@ -8,7 +8,7 @@ const EventosPages = () => {
     return (
         <div>
             <Title
-                titleText="Eventos"
+                titleText="Cadastro de Eventos"
              />
 
         </div>
