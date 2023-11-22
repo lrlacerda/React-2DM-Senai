@@ -1,17 +1,17 @@
 import React from "react";
-import "./TableTp.css";
+import "./TableEv.css";
 
 import edtiPen from "../../../assets/images/edit-pen.svg";
 import trashDelete from "../../../assets/images/trash-delete.svg";
 
-const TableTp = ({ dados, fnDelete = null, fnUpdate = null }) => {
+const TableEv = ({ dados, fnDelete = null, fnUpdate = null }) => {
     return (
         <table className="table-data">
             {/*cabeçalho*/}
             <thead className="table-data__head">
                 <tr className="table-data__head-row">
                     <th className="table-data__head-title table-data__head-title--big">
-                        Nome
+                        Evento
                     </th>
                     <th className="table-data__head-title table-data__head-title--big">
                         Descrição
@@ -40,6 +40,15 @@ const TableTp = ({ dados, fnDelete = null, fnUpdate = null }) => {
                         >
                             <td className="table-data__data table-data__data--big">
                                 {tp.titulo}
+                            </td>
+                            <td className="table-data__data table-data__data--big">
+                                {tp.descricao}
+                            </td>
+                            <td className="table-data__data table-data__data--big">
+                                {tp.tipoEvento}
+                            </td>
+                            <td className="table-data__data table-data__data--big">
+                                {tp.dataEvento}
                             </td>
 
                             <td className="table-data__data table-data__data--little">
@@ -74,4 +83,4 @@ const TableTp = ({ dados, fnDelete = null, fnUpdate = null }) => {
     );
 };
 
-export default TableTp;
+export default TableEv;

@@ -19,7 +19,7 @@
 
 @media screen and (min-width: 1200px) {
     .cadastro-evento__box {
-        justify-content: space-between;
+        justify-content: space-around;
         height: 540px;
     }
     
