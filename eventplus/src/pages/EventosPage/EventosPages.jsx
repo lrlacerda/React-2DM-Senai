@@ -4,36 +4,28 @@ import Title from "../../components/Titulo/Title";
 import MainContent from "../../components/MainContent/MainContent";
 import ImageIllustrator from "../../components/ImageIllustrator/ImageIllustrator";
 import Container from "../../components/Container/Container";
-import {
-    Input,
-    Button,
-    Select,
-} from "../../components/FormComponents/FormComponents";
+import {Input,Button,Select,} from "../../components/FormComponents/FormComponents";
 import EventoImage from "../../assets/images/evento.svg";
-import api, { eventsTypeResource } from "../../services/Service";
+import api, {eventsTypeResource, eventsResource} from "../../services/Service";
 import TableEv from "./TableEV/TableEv";
+import { dateFormatDbToView } from "../../Utils/stringFunctions";
 import Notification from "../../components/Notification/Notification";
 import Spinner from "../../components/Spinner/Spinner";
 
 const EventosPages = () => {
     //state
+    const idInstituicao = "899bf890-b2a3-447d-a134-a00c372dce12";
     const [frmEdit, setFrmEdit] = useState(false);
     const [titulo, setTitulo] = useState("");
     const [descricao, setDescricao] = useState("");
-    const [tipoEvento, setTipoEvento] = useState("");
+    const [tiposEvento, setTiposEvento] = useState([]);
     const [dataEvento, setDataEvento] = useState("");
-
+    const [options, setOptions] = useState([]);
+    const [eventos, setNextEvents] = useState([]);
     const [idEvento, setIdEvento] = useState(null); //para editar, por causa do evento
-    const [tipoEventos, setTipoEventos] = useState([]); //array
+
     const [notifyUser, setNotifyUser] = useState();
     const [showSpinner, setShowSpinner] = useState(false); //spinner loading
-
-    const [novoEvento, setNovoEvento] = useState({
-        titulo: "",
-        descricao: "",
-        tipoEvento: "",
-        dataEvento: "",
-    });
 
     //Chama a Função que após a pagina /DOM estar pronta
     useEffect(() => {
@@ -42,8 +34,12 @@ const EventosPages = () => {
             setShowSpinner(true);
             try {
                 const retorno = await api.get(eventsTypeResource);
-                setTipoEventos(retorno.data);
+                dePara(retorno.data);
                 console.log(retorno.data);
+
+                // Buscar eventos
+                const promiseEvent = await api.get(eventsResource);
+                setNextEvents(promiseEvent.data);
             } catch (error) {
                 console.log("Erro na api");
                 console.log(error);
@@ -54,6 +50,16 @@ const EventosPages = () => {
     }, []);
 
     //**********************************Cadastrar************************************ */
+
+    // Função para mapear tipos de evento para opções do Select
+    function dePara(eventos) {
+        const arrayOptions = [];
+        eventos.forEach((e) => {
+            arrayOptions.push({ value: e.idTipoEvento, text: e.titulo });
+        });
+        setOptions(arrayOptions);
+    }
+
     async function handleSubmit(e) {
         e.preventDefault();
         setShowSpinner(true);
@@ -65,16 +71,18 @@ const EventosPages = () => {
                 imgAlt: "Imagem de ilustração de Aviso. Moça em frente a um ponto de exclamação",
                 showMessage: true,
             });
+            return;
         }
 
         try {
-            const retorno = await api.post(eventsTypeResource, {
-                titulo: titulo,
+             await api.post(eventsResource, {
+                nomeEvento: titulo,
                 descricao: descricao,
-                tipoEvento: tipoEvento,
+                idTipoEvento: tiposEvento,
+                idInstituicao: idInstituicao,
                 dataEvento: dataEvento,
             });
-            setTitulo(""); //limpa o state
+
             setNotifyUser({
                 titleNote: "Sucesso",
                 textNote: "Evento Cadastrado com Sucesso",
@@ -83,14 +91,21 @@ const EventosPages = () => {
                 showMessage: true,
             });
 
-            setTipoEventos([...tipoEventos, retorno.data]);
+            // Atualização da lista de eventos
+            const searchEvents = api.get(eventsResource);
+            setNextEvents((await searchEvents).data);
+            // Limpeza dos campos do formulário
+            setTitulo("");
+            setDescricao("");
+            setTiposEvento("");
+            setDataEvento("");
+
         } catch (error) {
             setNotifyUser({
                 titleNote: "Erro",
-                textNote:
-                    "Erro na Operação. Verifique a conexção com a internet",
+                textNote: "Não foi possível cadastrar o evento!",
                 imgIcon: "danger",
-                imgAlt: "Imagem de ilustração de sucesso. Moça segurando um balão",
+                imgAlt: "Ilustração de erro. Moço em frente a um símbolo de erro",
                 showMessage: true,
             });
         }
@@ -113,13 +128,6 @@ const EventosPages = () => {
         setShowSpinner(false);
     }
 
-    //cancela a tela / ação de edição (vonta para o form de cadastro)
-    function editActionAbort() {
-        setFrmEdit(false);
-        setTitulo(""); //reseta as variáveis
-        setIdEvento(null); //reseta as variáveis
-    }
-
     //mostra o formulário de edição
     async function handleUpdate(e) {
         e.preventDefault(); //para o evento submit
@@ -127,15 +135,16 @@ const EventosPages = () => {
 
         try {
             //atualizar na api
-            const retorno = await api.put(eventsTypeResource + "/" + idEvento, {
-                titulo: titulo,
-            }); //o id está no state
+            const retorno = await api.put(eventsResource + "/" + idEvento, {
+                nomeEvento: titulo,
+                descricao: descricao,
+                idTipoEvento: tiposEvento,
+                idInstituicao: idInstituicao,
+                dataEvento: dataEvento,
+            }); 
 
             console.log(retorno);
             if (retorno.status === 204) {
-                setTitulo("");
-                setIdEvento(null);
-
                 //notificar o usuário
                 setNotifyUser({
                     titleNote: "Sucesso",
@@ -145,9 +154,10 @@ const EventosPages = () => {
                     showMessage: true,
                 });
                 //atualizar os dados na tela
-                const buscaEventos = await api.get(eventsTypeResource);
-                setTipoEventos(buscaEventos.data); //aqui retorna um array
+                const buscaEventos = await api.get(eventsResource);
+                setNextEvents(buscaEventos.data); //aqui retorna um array
             }
+
         } catch (error) {
             //notificar o usuário sobre o erro
             setNotifyUser({
@@ -162,17 +172,45 @@ const EventosPages = () => {
         setShowSpinner(false);
     }
 
+     async function showUpdateForm(idElement) {
+         setIdEvento(idElement);
+         setShowSpinner(true);
+         try {
+             // Requisição GET para obter os detalhes do evento
+             const promise = await api.get(`${eventsResource}/${idElement}`);
+             setTitulo(promise.data.nomeEvento);
+             setDescricao(promise.data.descricao);
+             setTiposEvento(promise.data.idTipoEvento);
+             setDataEvento(dateFormatDbToView(promise.data.dataEvento));
+         } catch (error) {
+             console.log(error.message);
+         }
+         setShowSpinner(false);
+         setFrmEdit(true);
+     }
+
+     // Função para cancelar a edição
+     function editActionAbort() {
+         setFrmEdit(false);
+         // Limpeza dos campos do formulário
+         setTitulo("");
+         setDescricao("");
+         setTiposEvento("");
+         setDataEvento("");
+     }
+
+
     /*****************************Apagar Dados******************************** */
     //apaga o tipo de evento na api
     async function handleDelete(idElement) {
-        if (window.confirm("Confirma a exclusão?")) {
+        if (!window.confirm("Confirma a exclusão?")) {
             setShowSpinner(true);
             try {
                 // Chama a API para deletar o evento com o idElement
                 const promise = await api.delete(
-                    `${eventsTypeResource}/${idElement}`
+                    `${eventsResource}/${idElement}`
                 );
-                if (promise.status == 204) {
+                if (promise.status === 204) {
                     setNotifyUser({
                         titleNote: "Sucesso",
                         textNote: "Evento excluido com sucesso",
@@ -180,9 +218,10 @@ const EventosPages = () => {
                         imgAlt: "Imagem de ilustração de sucesso. Moça segurando um balão",
                         showMessage: true,
                     });
-                    //Desafio: fazer uma função para retirar o registro apagado do array tipoEventos
-                    const buscaEventos = await api.get(eventsTypeResource);
-                    setTipoEventos(buscaEventos.data); //aqui retorna um array
+
+                    // Atualização da lista de eventos
+                    const searchEvents = await api.get(eventsResource);
+                    setNextEvents(searchEvents.data);
                 }
             } catch (error) {
                 alert(`Erro ao deletar evento de id ${idElement}`);
@@ -217,7 +256,7 @@ const EventosPages = () => {
                                         placeholder="Título"
                                         name="titulo"
                                         type="text"
-                                        required
+                                        required="required"
                                         value={titulo}
                                         manipulationFunction={(e) => {
                                             setTitulo(e.target.value);
@@ -228,7 +267,7 @@ const EventosPages = () => {
                                         placeholder="Descrição"
                                         name="descricao"
                                         type="text"
-                                        required
+                                        required="required"
                                         value={descricao}
                                         manipulationFunction={(e) => {
                                             setDescricao(e.target.value);
@@ -236,21 +275,14 @@ const EventosPages = () => {
                                     />
 
                                     <Select
-                                        id="tipoEvento"
-                                        name="tipoEvento"
-                                        required
-                                        options={[
-                                            {
-                                                value: "",
-                                                text: "Tipo de Evento",
-                                            },
-                                            ...tipoEventos.map((evento) => ({
-                                                value: evento.id,
-                                                text: evento.titulo,
-                                            })),
-                                        ]}
+                                        id="eventos"
+                                        name="Eventos"
+                                        required="required"
+                                        options={options}
+                                        value={tiposEvento}
+                                        defaultValue={tiposEvento}
                                         manipulationFunction={(e) =>
-                                            setTipoEvento(e.target.value)
+                                            setTiposEvento(e.target.value)
                                         }
                                     />
 
@@ -258,7 +290,8 @@ const EventosPages = () => {
                                         id="dataEvento"
                                         name="dataEvento"
                                         type="date"
-                                        required
+                                        placeholder="Data do Evento"
+                                        required="required"
                                         value={dataEvento}
                                         manipulationFunction={(e) => {
                                             setDataEvento(e.target.value);
@@ -269,6 +302,7 @@ const EventosPages = () => {
                                         id="cadastrar"
                                         name="cadastrar"
                                         type="submit"
+                                        additionalClass="btn-cadastrar"
                                     />
                                 </>
                             ) : (
@@ -279,29 +313,65 @@ const EventosPages = () => {
                                         placeholder="Título"
                                         name="titulo"
                                         type="text"
-                                        required
+                                        required="required"
                                         value={titulo}
                                         manipulationFunction={(e) => {
                                             setTitulo(e.target.value);
                                         }}
                                     />
-                                    {/* Outros campos de edição se necessário */}
+
+                                    <Input
+                                        id="Descricao"
+                                        placeholder="Descrição"
+                                        name="Descricao"
+                                        type="text"
+                                        required="required"
+                                        value={descricao}
+                                        manipulationFunction={(e) =>
+                                            setDescricao(e.target.value)
+                                        }
+                                    />
+                                    <Select
+                                        name="Eventos"
+                                        id="eventos"
+                                        required="required"
+                                        options={options}
+                                        value={tiposEvento}
+                                        defaultValue={tiposEvento}
+                                        manipulationFunction={(e) =>
+                                            setTiposEvento(e.target.value)
+                                        }
+                                    />
+
+                                    <Input
+                                        id="data"
+                                        placeholder="Data do Evento"
+                                        name="data"
+                                        type="date"
+                                        required="required"
+                                        value={dataEvento}
+                                        manipulationFunction={(e) =>
+                                            setDataEvento(e.target.value)
+                                        }
+                                    />
+                                    <div className="buttons-editbox"></div>
+
                                     <div className="buttons-editbox">
                                         <Button
                                             textButton="Atualizar"
                                             id="atualizar"
                                             name="atualizar"
                                             type="submit"
-                                            additionalClass="button-component--middle"
+                                            additionalClass="btn-cadastrar"
                                         />
                                         <Button
                                             textButton="Cancelar"
                                             id="cancelar"
                                             name="cancelar"
                                             type="button"
-                                            additionalClass="button-component--middle"
-                                            manipulationFunction={
-                                                editActionAbort
+                                            additionalClass="btn-cadastrar"
+                                            manipulationFunction={(e) =>
+                                                editActionAbort(e.target.value)
                                             }
                                         />
                                     </div>
@@ -316,7 +386,7 @@ const EventosPages = () => {
                     <Container>
                         <Title titleText={"Lista de Eventos"} color="white" />
                         <TableEv
-                            dados={tipoEventos}
+                            dados={eventos}
                             fnUpdate={showUpdateForm}
                             fnDelete={handleDelete}
                         />

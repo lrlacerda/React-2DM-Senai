@@ -27,5 +27,17 @@
         <member name="M:webapi.event_.Migrations.lucas.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:webapi.event_.Migrations.webapievent">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.event_.Migrations.webapievent.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.event_.Migrations.webapievent.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.event_.Migrations.webapievent.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
