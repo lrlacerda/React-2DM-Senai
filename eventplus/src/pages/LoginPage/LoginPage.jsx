@@ -1,15 +1,20 @@
 import React from "react";
-import Header from "../../components/Header/Header";
-import Title from "../../components/Titulo/Title";
+import Titulo from "../../components/Titulo/Title";
+import Logo from "../../assets/images/logo-pink.svg";
+import Container from "../../components/Container/Container";
 import "./LoginPage.css";
 
 const LoginPage = () => {
     return (
-        <div>
-             <Title
-                titleText="Login"
-             />
-        </div>
+        <>
+            <section className="login">
+                <Container>
+                    <form action="">
+                        <img src={Logo} alt="" />
+                    </form>
+                </Container>
+            </section>
+        </>
     );
 };
 

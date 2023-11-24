@@ -4,9 +4,16 @@ import Title from "../../components/Titulo/Title";
 import MainContent from "../../components/MainContent/MainContent";
 import ImageIllustrator from "../../components/ImageIllustrator/ImageIllustrator";
 import Container from "../../components/Container/Container";
-import {Input,Button,Select,} from "../../components/FormComponents/FormComponents";
+import {
+    Input,
+    Button,
+    Select,
+} from "../../components/FormComponents/FormComponents";
 import EventoImage from "../../assets/images/evento.svg";
-import api, {eventsTypeResource, eventsResource} from "../../services/Service";
+import api, {
+    eventsTypeResource,
+    eventsResource,
+} from "../../services/Service";
 import TableEv from "./TableEV/TableEv";
 import { dateFormatDbToView } from "../../Utils/stringFunctions";
 import Notification from "../../components/Notification/Notification";
@@ -62,7 +69,7 @@ const EventosPages = () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setShowSpinner(true);
+
         if (titulo.trim().length < 3) {
             setNotifyUser({
                 titleNote: "Aviso",
@@ -73,9 +80,10 @@ const EventosPages = () => {
             });
             return;
         }
+        setShowSpinner(true);
 
         try {
-             await api.post(eventsResource, {
+            await api.post(eventsResource, {
                 nomeEvento: titulo,
                 descricao: descricao,
                 idTipoEvento: tiposEvento,
@@ -99,7 +107,6 @@ const EventosPages = () => {
             setDescricao("");
             setTiposEvento("");
             setDataEvento("");
-
         } catch (error) {
             setNotifyUser({
                 titleNote: "Erro",
@@ -114,20 +121,6 @@ const EventosPages = () => {
 
     /**************************************Editar Cadastro****************************************** */
 
-    //mostra formulário de edição
-    async function showUpdateForm(idElement) {
-        setFrmEdit(true);
-        setIdEvento(idElement); //preenche o id do evento para poder atualizar
-        setShowSpinner(true);
-        try {
-            const retorno = await api.get(`${eventsTypeResource}/${idElement}`);
-            setTitulo(retorno.data.titulo);
-        } catch (error) {
-            alert(error);
-        }
-        setShowSpinner(false);
-    }
-
     //mostra o formulário de edição
     async function handleUpdate(e) {
         e.preventDefault(); //para o evento submit
@@ -141,9 +134,10 @@ const EventosPages = () => {
                 idTipoEvento: tiposEvento,
                 idInstituicao: idInstituicao,
                 dataEvento: dataEvento,
-            }); 
+            });
 
             console.log(retorno);
+
             if (retorno.status === 204) {
                 //notificar o usuário
                 setNotifyUser({
@@ -154,10 +148,9 @@ const EventosPages = () => {
                     showMessage: true,
                 });
                 //atualizar os dados na tela
-                const buscaEventos = await api.get(eventsResource);
-                setNextEvents(buscaEventos.data); //aqui retorna um array
+                const searchEvents = await api.get(eventsResource);
+                setNextEvents(searchEvents.data); //aqui retorna um array
             }
-
         } catch (error) {
             //notificar o usuário sobre o erro
             setNotifyUser({
@@ -172,38 +165,39 @@ const EventosPages = () => {
         setShowSpinner(false);
     }
 
-     async function showUpdateForm(idElement) {
-         setIdEvento(idElement);
-         setShowSpinner(true);
-         try {
-             // Requisição GET para obter os detalhes do evento
-             const promise = await api.get(`${eventsResource}/${idElement}`);
-             setTitulo(promise.data.nomeEvento);
-             setDescricao(promise.data.descricao);
-             setTiposEvento(promise.data.idTipoEvento);
-             setDataEvento(dateFormatDbToView(promise.data.dataEvento));
-         } catch (error) {
-             console.log(error.message);
-         }
-         setShowSpinner(false);
-         setFrmEdit(true);
-     }
+    async function showUpdateForm(idElement) {
+        setIdEvento(idElement);
+        setShowSpinner(true);
+        try {
+            // Requisição GET para obter os detalhes do evento
+            const promise = await api.get(`${eventsResource}/${idElement}`);
+            setTitulo(promise.data.nomeEvento);
+            setDescricao(promise.data.descricao);
+            setTiposEvento(promise.data.idTipoEvento);
+            setDataEvento(new Date(promise.data.dataEvento).toLocaleDateString("sv-SE"));
+        } catch (error) {
+            console.log(error.message);
+        }
+        setShowSpinner(false);
+        setFrmEdit(true);
+    }
 
-     // Função para cancelar a edição
-     function editActionAbort() {
-         setFrmEdit(false);
-         // Limpeza dos campos do formulário
-         setTitulo("");
-         setDescricao("");
-         setTiposEvento("");
-         setDataEvento("");
-     }
-
+    // Função para cancelar a edição
+    function editActionAbort() {
+        setFrmEdit(false);
+        // Limpeza dos campos do formulário
+        setTitulo("");
+        setDescricao("");
+        setTiposEvento("");
+        setDataEvento("");
+    }
 
     /*****************************Apagar Dados******************************** */
     //apaga o tipo de evento na api
     async function handleDelete(idElement) {
         if (!window.confirm("Confirma a exclusão?")) {
+            return;
+        }
             setShowSpinner(true);
             try {
                 // Chama a API para deletar o evento com o idElement
@@ -228,7 +222,7 @@ const EventosPages = () => {
                 console.error(error);
             }
             setShowSpinner(false);
-        }
+        
     }
 
     return (
