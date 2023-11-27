@@ -63,6 +63,7 @@ export const Select = ({
             value={defaultValue}
         >
             {/* <option value="">Tipo Evento</option> */}
+            <option>Selecione</option>
             {options.map((o) => {
                 return (
                     <option key={Math.random()} value={o.value}>

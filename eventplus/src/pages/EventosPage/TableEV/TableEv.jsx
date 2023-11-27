@@ -50,6 +50,7 @@ const TableEv = ({ dados, fnDelete = null, fnUpdate = null }) => {
                                 data-tooltip-place="top"
                             >
                                 <Tooltip id={tp.idEvento} className="tooltip" />
+                                {tp.descricao.substr(0, 15)}...
                             </td>
                             <td className="table-data__data table-data__data--big">
                                 {tp.tiposEvento.titulo}

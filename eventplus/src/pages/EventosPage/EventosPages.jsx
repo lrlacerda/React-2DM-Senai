@@ -4,18 +4,11 @@ import Title from "../../components/Titulo/Title";
 import MainContent from "../../components/MainContent/MainContent";
 import ImageIllustrator from "../../components/ImageIllustrator/ImageIllustrator";
 import Container from "../../components/Container/Container";
-import {
-    Input,
-    Button,
-    Select,
-} from "../../components/FormComponents/FormComponents";
+import {Input,Button,Select} from "../../components/FormComponents/FormComponents";
 import EventoImage from "../../assets/images/evento.svg";
-import api, {
-    eventsTypeResource,
-    eventsResource,
-} from "../../services/Service";
+import api, {eventsTypeResource,eventsResource} from "../../services/Service";
 import TableEv from "./TableEV/TableEv";
-import { dateFormatDbToView } from "../../Utils/stringFunctions";
+// import { dateFormatDbToView } from "../../Utils/stringFunctions";
 import Notification from "../../components/Notification/Notification";
 import Spinner from "../../components/Spinner/Spinner";
 
@@ -37,7 +30,7 @@ const EventosPages = () => {
     //Chama a Função que após a pagina /DOM estar pronta
     useEffect(() => {
         //define a chamada na api
-        async function loadEventsType() {
+        async function loadEvents() {
             setShowSpinner(true);
             try {
                 const retorno = await api.get(eventsTypeResource);
@@ -53,7 +46,7 @@ const EventosPages = () => {
             }
             setShowSpinner(false);
         }
-        loadEventsType();
+        loadEvents();
     }, []);
 
     //**********************************Cadastrar************************************ */
@@ -85,10 +78,10 @@ const EventosPages = () => {
         try {
             await api.post(eventsResource, {
                 nomeEvento: titulo,
-                descricao: descricao,
                 idTipoEvento: tiposEvento,
-                idInstituicao: idInstituicao,
                 dataEvento: dataEvento,
+                descricao: descricao,
+                idInstituicao: idInstituicao,
             });
 
             setNotifyUser({
@@ -128,12 +121,12 @@ const EventosPages = () => {
 
         try {
             //atualizar na api
-            const retorno = await api.put(eventsResource + "/" + idEvento, {
+            const retorno = await api.put(`${eventsResource}/${idEvento}`, {
                 nomeEvento: titulo,
-                descricao: descricao,
                 idTipoEvento: tiposEvento,
-                idInstituicao: idInstituicao,
                 dataEvento: dataEvento,
+                descricao: descricao,
+                idInstituicao: idInstituicao,
             });
 
             console.log(retorno);
@@ -147,10 +140,13 @@ const EventosPages = () => {
                     imgAlt: "Imagem de ilustração de sucesso. Moça segurando um balão",
                     showMessage: true,
                 });
-                //atualizar os dados na tela
-                const searchEvents = await api.get(eventsResource);
-                setNextEvents(searchEvents.data); //aqui retorna um array
             }
+            editActionAbort(true);
+
+            //atualizar os dados na tela
+            const searchEvents = await api.get(eventsResource);
+            setNextEvents(searchEvents.data); //aqui retorna um array
+            
         } catch (error) {
             //notificar o usuário sobre o erro
             setNotifyUser({
@@ -212,11 +208,10 @@ const EventosPages = () => {
                         imgAlt: "Imagem de ilustração de sucesso. Moça segurando um balão",
                         showMessage: true,
                     });
-
-                    // Atualização da lista de eventos
-                    const searchEvents = await api.get(eventsResource);
-                    setNextEvents(searchEvents.data);
                 }
+                // Atualização da lista de eventos
+                const searchEvents = await api.get(eventsResource);
+                setNextEvents(searchEvents.data);
             } catch (error) {
                 alert(`Erro ao deletar evento de id ${idElement}`);
                 console.error(error);
@@ -274,7 +269,7 @@ const EventosPages = () => {
                                         required="required"
                                         options={options}
                                         value={tiposEvento}
-                                        defaultValue={tiposEvento}
+                                        // defaultValue={tiposEvento}
                                         manipulationFunction={(e) =>
                                             setTiposEvento(e.target.value)
                                         }
@@ -317,7 +312,7 @@ const EventosPages = () => {
                                     <Input
                                         id="Descricao"
                                         placeholder="Descrição"
-                                        name="Descricao"
+                                        name="descricao"
                                         type="text"
                                         required="required"
                                         value={descricao}
@@ -326,7 +321,7 @@ const EventosPages = () => {
                                         }
                                     />
                                     <Select
-                                        name="Eventos"
+                                        name="eventos"
                                         id="eventos"
                                         required="required"
                                         options={options}
@@ -348,7 +343,7 @@ const EventosPages = () => {
                                             setDataEvento(e.target.value)
                                         }
                                     />
-                                    <div className="buttons-editbox"></div>
+                                    
 
                                     <div className="buttons-editbox">
                                         <Button
@@ -364,9 +359,9 @@ const EventosPages = () => {
                                             name="cancelar"
                                             type="button"
                                             additionalClass="btn-cadastrar"
-                                            manipulationFunction={(e) =>
-                                                editActionAbort(e.target.value)
-                                            }
+                                            manipulationFunction={(e) => {
+                                                editActionAbort();
+                                            }}
                                         />
                                     </div>
                                 </>
