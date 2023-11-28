@@ -4,9 +4,9 @@ import Title from "../../components/Titulo/Title";
 import MainContent from "../../components/MainContent/MainContent";
 import ImageIllustrator from "../../components/ImageIllustrator/ImageIllustrator";
 import Container from "../../components/Container/Container";
-import {Input,Button,Select} from "../../components/FormComponents/FormComponents";
+import {Input,Button,Select, Select2} from "../../components/FormComponents/FormComponents";
 import EventoImage from "../../assets/images/evento.svg";
-import api, {eventsTypeResource,eventsResource} from "../../services/Service";
+import api, {eventsTypeResource,eventsResource,instituicaoResource,} from "../../services/Service";
 import TableEv from "./TableEV/TableEv";
 // import { dateFormatDbToView } from "../../Utils/stringFunctions";
 import Notification from "../../components/Notification/Notification";
@@ -15,12 +15,14 @@ import Spinner from "../../components/Spinner/Spinner";
 const EventosPages = () => {
     //state
     const idInstituicao = "899bf890-b2a3-447d-a134-a00c372dce12";
+    const [instituicao, setInstituicao] = useState([])
     const [frmEdit, setFrmEdit] = useState(false);
     const [titulo, setTitulo] = useState("");
     const [descricao, setDescricao] = useState("");
     const [tiposEvento, setTiposEvento] = useState([]);
     const [dataEvento, setDataEvento] = useState("");
     const [options, setOptions] = useState([]);
+    const [options2, setOptions2] = useState([]);
     const [eventos, setNextEvents] = useState([]);
     const [idEvento, setIdEvento] = useState(null); //para editar, por causa do evento
 
@@ -49,6 +51,27 @@ const EventosPages = () => {
         loadEvents();
     }, []);
 
+    useEffect(() => {
+        //define a chamada na api instituição
+        async function loadInstituicao() {
+            setShowSpinner(true);
+            try {
+                const retorno = await api.get(instituicaoResource);
+                deParaInstituicao(retorno.data);
+                console.log(retorno.data);
+
+                // Buscar eventos
+                const promiseEvent = await api.get(eventsResource);
+                setNextEvents(promiseEvent.data);
+            } catch (error) {
+                console.log("Erro na api");
+                console.log(error);
+            }
+            setShowSpinner(false);
+        }
+        loadInstituicao();
+    }, []);
+
     //**********************************Cadastrar************************************ */
 
     // Função para mapear tipos de evento para opções do Select
@@ -58,6 +81,14 @@ const EventosPages = () => {
             arrayOptions.push({ value: e.idTipoEvento, text: e.titulo });
         });
         setOptions(arrayOptions);
+    }
+    // Função para mapear a instituição para opções do Select
+    function deParaInstituicao(instituicao) {
+        const arrayOptions2 = [];
+        instituicao.forEach((e) => {
+            arrayOptions2.push({ value: e.idInstituicao, text: e.nomeFantasia });
+        });
+        setOptions2(arrayOptions2);
     }
 
     async function handleSubmit(e) {
@@ -269,6 +300,18 @@ const EventosPages = () => {
                                         required="required"
                                         options={options}
                                         value={tiposEvento}
+                                        // defaultValue={tiposEvento}
+                                        manipulationFunction={(e) =>
+                                            setTiposEvento(e.target.value)
+                                        }
+                                    />
+
+                                    <Select2
+                                        id="instituicao"
+                                        name="Instituicao"
+                                        required="required"
+                                        options={options2}
+                                        value={instituicao}
                                         // defaultValue={tiposEvento}
                                         manipulationFunction={(e) =>
                                             setTiposEvento(e.target.value)

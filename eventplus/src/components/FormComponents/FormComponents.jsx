@@ -63,7 +63,37 @@ export const Select = ({
             value={defaultValue}
         >
             {/* <option value="">Tipo Evento</option> */}
-            <option>Selecione</option>
+            <option> Selecione o Tipo de Evento...</option>
+            {options.map((o) => {
+                return (
+                    <option key={Math.random()} value={o.value}>
+                        {o.text}
+                    </option>
+                );
+            })}
+        </select>
+    );
+};
+export const Select2 = ({
+    required,
+    id,
+    name,
+    options,
+    manipulationFunction,
+    additionalClass = "",
+    defaultValue,
+}) => {
+    return (
+        <select
+            name={name}
+            id={id}
+            required={required}
+            className={`input-component ${additionalClass}`}
+            onChange={manipulationFunction}
+            value={defaultValue}
+        >
+            {/* <option value="">Tipo Evento</option> */}
+            <option>Selecione a Instituição...</option>
             {options.map((o) => {
                 return (
                     <option key={Math.random()} value={o.value}>

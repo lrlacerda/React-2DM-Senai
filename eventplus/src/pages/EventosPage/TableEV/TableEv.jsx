@@ -56,7 +56,7 @@ const TableEv = ({ dados, fnDelete = null, fnUpdate = null }) => {
                                 {tp.tiposEvento.titulo}
                             </td>
                             <td className="table-data__data table-data__data--big">
-                                {tp.instituicao}
+                                {tp.instituicao.nomeFantasia}
                             </td>
                             <td className="table-data__data table-data__data--big">
                                 {dateFormatDbToView(tp.dataEvento)}
