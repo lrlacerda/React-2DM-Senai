@@ -130,6 +130,7 @@ const EventosPages = () => {
             setTitulo("");
             setDescricao("");
             setTiposEvento("");
+            setInstituicao("");
             setDataEvento("");
         } catch (error) {
             setNotifyUser({
@@ -201,6 +202,7 @@ const EventosPages = () => {
             setTitulo(promise.data.nomeEvento);
             setDescricao(promise.data.descricao);
             setTiposEvento(promise.data.idTipoEvento);
+            setInstituicao(promise.data.idInstituicao);
             setDataEvento(new Date(promise.data.dataEvento).toLocaleDateString("sv-SE"));
         } catch (error) {
             console.log(error.message);
@@ -216,6 +218,7 @@ const EventosPages = () => {
         setTitulo("");
         setDescricao("");
         setTiposEvento("");
+        setInstituicao("");
         setDataEvento("");
     }
 
@@ -300,7 +303,6 @@ const EventosPages = () => {
                                         required="required"
                                         options={options}
                                         value={tiposEvento}
-                                        // defaultValue={tiposEvento}
                                         manipulationFunction={(e) =>
                                             setTiposEvento(e.target.value)
                                         }
@@ -312,9 +314,8 @@ const EventosPages = () => {
                                         required="required"
                                         options={options2}
                                         value={instituicao}
-                                        // defaultValue={instituicao}
                                         manipulationFunction={(e) =>
-                                            setTiposEvento(e.target.value)
+                                            setInstituicao(e.target.value)
                                         }
                                     />
 
@@ -375,6 +376,17 @@ const EventosPages = () => {
                                         }
                                     />
 
+                                    <Select2
+                                        id="instituicao"
+                                        name="Instituicao"
+                                        required="required"
+                                        options={options2}
+                                        value={instituicao}
+                                        manipulationFunction={(e) =>
+                                            setInstituicao(e.target.value)
+                                        }
+                                    />
+
                                     <Input
                                         id="data"
                                         placeholder="Data do Evento"
@@ -386,7 +398,6 @@ const EventosPages = () => {
                                             setDataEvento(e.target.value)
                                         }
                                     />
-                                    
 
                                     <div className="buttons-editbox">
                                         <Button
