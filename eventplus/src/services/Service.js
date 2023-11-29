@@ -1,9 +1,10 @@
 import axios from "axios";
 
-export const eventsResource = '/Evento'
-export const nextEventResource = '/Evento/ListarProximos'
-export const eventsTypeResource = '/TiposEvento'
-export const instituicaoResource = '/Instituicao'
+export const eventsResource = "/Evento";
+export const nextEventResource = "/Evento/ListarProximos";
+export const eventsTypeResource = "/TiposEvento";
+export const instituicaoResource = "/Instituicao";
+export const loginResource = "/Login";
 
 const apiPort = "7118";
 const localApiUrl = `https://localhost:${apiPort}/api`;

@@ -312,7 +312,7 @@ const EventosPages = () => {
                                         required="required"
                                         options={options2}
                                         value={instituicao}
-                                        // defaultValue={tiposEvento}
+                                        // defaultValue={instituicao}
                                         manipulationFunction={(e) =>
                                             setTiposEvento(e.target.value)
                                         }
