@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import ImageIllustrator from "../../components/ImageIllustrator/ImageIllustrator";
 import logo from "../../assets/images/logo-pink.svg";
 import { Input, Button } from "../../components/FormComponents/FormComponents";
@@ -6,18 +6,24 @@ import loginImage from "../../assets/images/login.svg";
 import api, { loginResource } from "../../services/Service";
 import "./LoginPage.css";
 import { UserContext, userDecodeToken } from "../../context/AuthContext";
-
+import { useNavigate } from "react-router-dom";
 import Notification from "../../components/Notification/Notification";
-import Spinner from "../../components/Spinner/Spinner";
 
 const LoginPage = () => {
-    const [user, setUser] = useState({ email: "lucas@email.com", senha: "" });
+    const [user, setUser] = useState({ email: "", senha: "" });
     const { userData, setUserData } = useContext(UserContext); //importa os dados locais do usuário
 
     const isValidEmail = validateEmail(user.email);
     const isValidPassword = validatePassword(user.senha);
 
     const [notifyUser, setNotifyUser] = useState();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (userData.nome) {
+            navigate("/");
+        }
+    }, [userData]);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -51,6 +57,7 @@ const LoginPage = () => {
             const userFullToken = userDecodeToken(promise.data.token);
             setUserData(userFullToken); //guarda o token globalmente
             localStorage.setItem("token", JSON.stringify(userFullToken));
+            navigate("/"); //envia o usuário para a home
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 setNotifyUser({
