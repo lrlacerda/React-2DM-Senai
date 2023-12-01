@@ -1,5 +1,5 @@
-import Rotas from "./Routes";
-import { UserContext } from "./context/AuthContext";
+import Rotas from "./routes/Routes";
+import { UserContext } from"./context/AuthContext";
 import "./App.css";
 import { useEffect, useState } from "react";
 
