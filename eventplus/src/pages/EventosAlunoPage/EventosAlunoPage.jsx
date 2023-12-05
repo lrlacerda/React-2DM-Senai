@@ -6,26 +6,27 @@ import Container from "../../components/Container/Container";
 import { Select } from "../../components/FormComponents/FormComponents";
 import Spinner from "../../components/Spinner/Spinner";
 import Modal from "../../components/Modal/Modal";
-import api, {eventsResource, nextEventResource} from "../../services/Service";
+import api, {
+    eventsResource,
+    nextEventResource,
+    myEventsResource,
+} from "../../services/Service";
 
 import "./EventosAlunoPage.css";
 import { UserContext } from "../../context/AuthContext";
+import { wait } from "@testing-library/user-event/dist/utils";
 
 const EventosAlunoPage = () => {
     // state do menu mobile
     const [exibeNavbar, setExibeNavbar] = useState(false);
-    const [eventos, setEventos] = useState([
-        // { idEvento: "15876", nomeEvento: "Evento 1", dataEvento: "2023-12-01" },
-        // { idEvento: "15878", nomeEvento: "Evento 2", dataEvento: "2023-12-10" },
-        // { idEvento: "15237", nomeEvento: "Evento 3", dataEvento: "2023-12-23" },
-    ]);
+    const [eventos, setEventos] = useState([]);
     // select mocado
     const [quaisEventos, setQuaisEventos] = useState([
         { value: 1, text: "Todos os eventos" },
         { value: 2, text: "Meus eventos" },
     ]);
 
-    const [tipoEvento, setTipoEvento] = useState(1); //código do tipo do Evento escolhido
+    const [tipoEvento, setTipoEvento] = useState(); //código do tipo do Evento escolhido
     const [showSpinner, setShowSpinner] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -33,30 +34,54 @@ const EventosAlunoPage = () => {
     const { userData, setUserData } = useContext(UserContext);
 
     useEffect(() => {
-        async function name(params) {
-            if (tipoEvento == 1) {
+        async function loadEventsType() {
+            setShowSpinner(true);
+            setEventos([]); //zera array de eventos
+
+            if (tipoEvento == "1") {
                 try {
-                    const retornoEventos = await api.get(eventsResource)
-                    setEventos(retornoEventos.data)
+                    const retornoEventos = await api.get(eventsResource);
+                    setEventos(retornoEventos.data);
                 } catch (error) {
-                    console.log("Erro na Api")
+                    console.log("Erro na Api");
+                }
+            } else if (tipoEvento === "2") {
+                try {
+                    const retornoEventos = await api.get(
+                        `${myEventsResource}/${userData.userId}`
+                    );
+                    console.log(retornoEventos.data);
+
+                    const arrEventos = [];
+                    retornoEventos.data.forEach((e) => {
+                        arrEventos.push(e.evento);
+                    });
+
+                    setEventos(arrEventos);
+                } catch (error) {
+                    console.log("Erro na api");
                 }
             } else {
-                
+                setEventos([]);
             }
+            setShowSpinner(false);
         }
-        setShowSpinner(true)
-        setEventos([])//zera array de eventos
-       
-        //Fazer criar a função loadEventsType trazer todos os eventos ou meus eventos (tipoEventos colocar para ser observada no useffet)
-        //roda no carregamento da pagina e sempre que tipo de evento for alterado
-        // loadEventsType();
-        // Função para carregar os eventos de acordo com o tipo selecionado
-       
 
-      
+        loadEventsType();
     }, [tipoEvento]); // Adiciona 'tipoEvento' como dependência para disparar o useEffect sempre que o valor de 'tipoEvento' mudar
 
+    const verificaPresenca = (arrAllEvents, eventsUser) => {
+        for (let x = 0; x < arrAllEvents.length; x++) {
+            //para cada evento principal
+            for (let i = 0; i < eventsUser.length; i++) {
+                //procura a correspondencia em minhas presenças
+                if (arrAllEvents[x].idEvento === eventsUser[i].idEvento) {
+                    arrAllEvents[x].situacao = true;
+                    break; //para de procurar para o evento principal atual
+                }
+            }
+        }
+    };
 
     // toggle meus eventos ou todos os eventos
     function myEvents(tpEvent) {

@@ -14,7 +14,7 @@
   transition: 1.2s;
 }
 
-.toggle___switch {
+.toggle__switch {
   position: absolute;
   top: calc(50% - 7px);
   left: 1px;
@@ -36,7 +36,20 @@
   background-color: #B51D44;
 }
 
-.toggle__switch-check:checked ~ .toggle >.toggle___switch {
+.toggle__switch-check:checked ~ .toggle >.toggle__switch {
+  left: auto;
+  right: 1px;
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.toggle--active {
+  /* justify-content: flex-end; */
+  border: 2px solid #B51D44;
+  background-color: #B51D44;
+}
+
+.toggle__switch--active {
   left: auto;
   right: 1px;
   background-color: #fff;

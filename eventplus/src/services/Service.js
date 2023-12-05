@@ -4,6 +4,7 @@ export const eventsResource = "/Evento";
 export const nextEventResource = "/Evento/ListarProximos";
 export const eventsTypeResource = "/TiposEvento";
 export const instituicaoResource = "/Instituicao";
+export const myEventsResource = "/PresencaEvento/ListarMinhas";
 export const loginResource = "/Login";
 
 const apiPort = "7118";

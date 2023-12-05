@@ -22,6 +22,8 @@ namespace webapi.event_.Contexts
 
         public DbSet<PresencasEvento> PresencasEvento { get; set; }
 
+
+
         /// <summary>
         /// Define as opções de construção do banco
         /// </summary>
