@@ -8,10 +8,9 @@ import Spinner from "../../components/Spinner/Spinner";
 import Modal from "../../components/Modal/Modal";
 import api, {
     eventsResource,
-    nextEventResource,
     myEventsResource,
+    presencesEventResource,
 } from "../../services/Service";
-
 import "./EventosAlunoPage.css";
 import { UserContext } from "../../context/AuthContext";
 import { wait } from "@testing-library/user-event/dist/utils";
@@ -40,21 +39,38 @@ const EventosAlunoPage = () => {
 
             if (tipoEvento == "1") {
                 try {
-                    const retornoEventos = await api.get(eventsResource);
-                    setEventos(retornoEventos.data);
+                    const todosEventos = await api.get(eventsResource);
+                    const meusEventos = await api.get(
+                        `${myEventsResource}/${userData.userId}`
+                    );
+                    const eventosMarcados = verificaPresenca(
+                        todosEventos.data,
+                        meusEventos.data
+                    );
+
+                    setEventos(eventosMarcados);
+
+                    console.clear();
+                    console.log("todos os eventos");
+                    console.log(todosEventos.data);
+                    console.log("meus eventos");
+                    console.log(meusEventos.data);
+                    console.log("Eventos Marcados");
+                    console.log(eventosMarcados);
                 } catch (error) {
                     console.log("Erro na Api");
                 }
             } else if (tipoEvento === "2") {
                 try {
-                    const retornoEventos = await api.get(
+                    const todosEventos = await api.get(
                         `${myEventsResource}/${userData.userId}`
                     );
-                    console.log(retornoEventos.data);
+                    console.log(todosEventos.data);
 
                     const arrEventos = [];
-                    retornoEventos.data.forEach((e) => {
-                        arrEventos.push(e.evento);
+
+                    todosEventos.data.forEach((e) => {
+                        arrEventos.push({ ...e.evento, situacao: e.situacao });
                     });
 
                     setEventos(arrEventos);
@@ -68,19 +84,25 @@ const EventosAlunoPage = () => {
         }
 
         loadEventsType();
-    }, [tipoEvento]); // Adiciona 'tipoEvento' como dependência para disparar o useEffect sempre que o valor de 'tipoEvento' mudar
+    }, [tipoEvento, userData.userId]); // Adiciona 'tipoEvento' como dependência para disparar o useEffect sempre que o valor de 'tipoEvento' mudar
 
     const verificaPresenca = (arrAllEvents, eventsUser) => {
         for (let x = 0; x < arrAllEvents.length; x++) {
             //para cada evento principal
             for (let i = 0; i < eventsUser.length; i++) {
                 //procura a correspondencia em minhas presenças
-                if (arrAllEvents[x].idEvento === eventsUser[i].idEvento) {
+                if (
+                    arrAllEvents[x].idEvento === eventsUser[i].evento.idEvento
+                ) {
                     arrAllEvents[x].situacao = true;
+                    arrAllEvents[x].idPresencaEvento =
+                        eventsUser[i].idPresencaEvento;
                     break; //para de procurar para o evento principal atual
                 }
             }
         }
+        //retorna todos os eventos marcados com a presença do usuário
+        return arrAllEvents;
     };
 
     // toggle meus eventos ou todos os eventos
@@ -100,8 +122,40 @@ const EventosAlunoPage = () => {
         alert("Remover o comentário");
     };
 
-    function handleConnect() {
-        alert("Desenvolver a função conectar evento");
+    async function handleConnect(eventId, whatTheFunction, presencaId = null) {
+        if (whatTheFunction === "connect") {
+            try {
+                const promise = await api.post(presencesEventResource, {
+                    situacao: true,
+                    idUsuario: userData.userId,
+                    idEvento: eventId,
+                });
+
+                if (promise.status === 201) {
+                    alert("Presença confirmada!!");
+                }
+                // setTipoEvento("1")
+                const todosEventos = api.get(eventsResource);
+                setEventos(todosEventos.data);
+            } catch (error) {
+
+            }
+            return;
+        }
+
+        try {
+            const unconnected = await api.delete(
+                `${presencesEventResource}/${presencaId}
+            `
+            );
+            if (unconnected.status === 204) {
+                alert("Desconectado do evento");
+                const todosEventos = await api.get(eventsResource);
+                setEventos(todosEventos.data);
+            }
+        } catch (error) {
+
+        }
     }
     return (
         <>
