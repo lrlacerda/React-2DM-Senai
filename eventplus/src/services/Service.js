@@ -8,6 +8,8 @@ export const myEventsResource = "/PresencaEvento/ListarMinhas";
 export const presencesEventResource = "/PresencaEvento";
 export const loginResource = "/Login";
 
+
+
 const apiPort = "7118";
 const localApiUrl = `https://localhost:${apiPort}/api`;
 const externalApiUrl = null;
