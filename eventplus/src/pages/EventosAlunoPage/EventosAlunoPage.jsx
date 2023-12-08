@@ -10,6 +10,7 @@ import api, {
     eventsResource,
     myEventsResource,
     presencesEventResource,
+    commentaryEventResource,
 } from "../../services/Service";
 import "./EventosAlunoPage.css";
 import { UserContext } from "../../context/AuthContext";
@@ -31,6 +32,7 @@ const EventosAlunoPage = () => {
 
     // recupera os dados globais do usuário
     const { userData, setUserData } = useContext(UserContext);
+    const [comentario, setComentario] = useState("");
 
     useEffect(() => {
         loadEventsType();
@@ -52,14 +54,6 @@ const EventosAlunoPage = () => {
                 );
 
                 setEventos(eventosMarcados);
-
-                console.clear();
-                console.log("todos os eventos");
-                console.log(todosEventos.data);
-                console.log("meus eventos");
-                console.log(meusEventos.data);
-                console.log("Eventos Marcados");
-                console.log(eventosMarcados);
             } catch (error) {
                 console.log("Erro na Api");
             }
@@ -114,30 +108,40 @@ const EventosAlunoPage = () => {
         setTipoEvento(tpEvent);
     }
 
-    const showHideModal =  () => {
+    const showHideModal = (idEvent) => {
         setShowModal(showModal ? false : true);
+        setUserData({ ...userData, idEvento: idEvent });
     };
 
     //ler comentário - get
-    const loadMyComentary = async () => {
-        alert("Carregar o comentário")
-
+    const loadMyComentary = async (idUsuario, idEvento) => {
         try {
-            const response = await api.get();
-            console.log('Comentários do usuário:', response.data);
+            const promise = await api.get(
+                `${commentaryEventResource}?idUsuario=${idUsuario}&idEvento=${idEvento}}`
+            );
+            console.clear();
+            console.log(promise.data.descricao);
+
+            setComentario(promise.data[0].descricao);
         } catch (error) {
-            console.error('Erro ao carregar comentários:', error);
+            console.error("Erro ao carregar comentários:", error);
         }
     };
     //ler comentário - post
-    const PostMyComentary = async () => {
-        alert("Carregar o comentário")
-
+    const PostMyComentary = async (descricao, idUsuario, idEvento) => {
         try {
-            const response = await api.post();
-            console.log('Comentários do usuário:', response.data);
+            const promise = await api.post(commentaryEventResource, {
+                descricao: descricao,
+                exibe: true,
+                idUsuario: idUsuario,
+                idEvento: idEvento
+            });
+
+            if (promise.status == 200) {
+                alert("Comentario Cadastrado com Sucesso")
+            }
         } catch (error) {
-            console.error('Erro ao postar comentários:', error);
+            console.error("Erro ao postar comentários:", error);
         }
     };
     //remove comentário - delete
@@ -145,10 +149,10 @@ const EventosAlunoPage = () => {
         alert("Remover o comentário");
 
         try {
-            const response = await api.delete();
-            console.log('Comentários do usuário:', response.data);
+            const promise = await api.delete();
+            console.log("Comentários do usuário:", promise.data);
         } catch (error) {
-            console.error('Erro ao deletar comentários:', error);
+            console.error("Erro ao deletar comentários:", error);
         }
     };
 
@@ -166,7 +170,7 @@ const EventosAlunoPage = () => {
                     loadEventsType();
                     alert("Presença confirmada!!");
                 }
-                setTipoEvento("1")
+                setTipoEvento("1");
                 const todosEventos = api.get(eventsResource);
                 setEventos(todosEventos.data);
             } catch (error) {}
@@ -175,7 +179,8 @@ const EventosAlunoPage = () => {
 
         try {
             const unconnected = await api.delete(
-                `${presencesEventResource}/${presencaId}`);
+                `${presencesEventResource}/${presencaId}`
+            );
             if (unconnected.status === 204) {
                 loadEventsType();
                 alert("Desconectado do evento");
@@ -203,9 +208,7 @@ const EventosAlunoPage = () => {
                     <Table
                         dados={eventos}
                         fnConnect={handleConnect}
-                        fnShowModal={() => {
-                            showHideModal();
-                        }}
+                        fnShowModal={showHideModal}
                     />
                 </Container>
             </MainContent>
@@ -220,6 +223,7 @@ const EventosAlunoPage = () => {
                     fnGet={loadMyComentary}
                     fnPost={PostMyComentary}
                     fnDelete={commentaryRemove}
+                    comentaryText={comentario}
                 />
             ) : null}
         </>

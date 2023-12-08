@@ -18,7 +18,7 @@ namespace webapi.event_.Repositories
             throw new NotImplementedException();
         }
 
-        public ComentariosEvento BuscarPorIdUsuario(Guid id)
+        public ComentariosEvento BuscarPorIdUsuario(Guid idUsuario, Guid idEvento)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace webapi.event_.Repositories
                             NomeEvento = c.Evento!.NomeEvento,
                         }
 
-                    }).FirstOrDefault(c => c.IdUsuario == id)!;
+                    }).FirstOrDefault(c => c.IdUsuario == idUsuario && c.IdEvento == idEvento)!;
             }
             catch (Exception)
             {

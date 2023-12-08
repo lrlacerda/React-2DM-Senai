@@ -26,12 +26,12 @@ namespace webapi.event_.Controllers
             }
         }
 
-        [HttpGet("BuscarPorIdUsuario/{id}")]
-        public IActionResult getByIdUser(Guid id)
+        [HttpGet("BuscarPorIdUsuario")]
+        public IActionResult getByIdUser(Guid idUsuario, Guid idEvento)
         {
             try
             {
-                return Ok(comentario.BuscarPorIdUsuario(id));
+                return Ok(comentario.BuscarPorIdUsuario(idUsuario, idEvento));
             }
             catch (Exception ex)
             {
