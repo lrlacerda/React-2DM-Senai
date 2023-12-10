@@ -12,16 +12,20 @@ const Modal = ({
     fnGet = null,
     fnPost = null,
     fnDelete = null,
+    userId = null,
+    idEvento = null,
+    idComentario = null,
 }) => {
     const { userData } = useContext(UserContext);
     const [comentarioDesc, setComentarioDesc] = useState("");
- 
+
     useEffect(() => {
-        async function carregarDados() {
-            fnGet(userData.userId, userData.idEvento);
-        }
         carregarDados();
     }, []);
+
+    async function carregarDados() {
+        await fnGet(userId, idEvento);
+    }
 
     return (
         <div className="modal">
@@ -30,7 +34,7 @@ const Modal = ({
                     {modalTitle}
                     <span
                         className="modal__close"
-                        onClick={() => showHideModal(true)}
+                        onClick={() => showHideModal(idEvento)}
                     >
                         x
                     </span>
@@ -43,7 +47,8 @@ const Modal = ({
                         className="comentary__icon-delete"
                         alt="Ícone de uma lixeira"
                         onClick={() => {
-                            fnDelete();
+                            fnDelete(idComentario);
+                            carregarDados();
                         }}
                     />
 
@@ -57,15 +62,27 @@ const Modal = ({
                     className="comentary__entry"
                     value={comentarioDesc}
                     manipulationFunction={(e) => {
-                        setComentarioDesc(e.target.value)
+                        setComentarioDesc(e.target.value);
                     }}
                 />
 
                 <Button
                     textButton="Comentar"
                     additionalClass="comentary__button"
-                    manipulationFunction={() => {
-                        fnPost(comentarioDesc, userData.userId, userData.idEvento);
+                    manipulationFunction={async () => {
+                        if (idComentario !== null) {
+                            alert(
+                                "Já existe um comentário cadastrado para o evento."
+                            );
+                        } else {
+                            fnPost(
+                                await comentarioDesc.trim(),
+                                userId,
+                                idEvento
+                            );
+                            await carregarDados();
+                        }
+                        setComentarioDesc("");
                     }}
                 />
             </article>

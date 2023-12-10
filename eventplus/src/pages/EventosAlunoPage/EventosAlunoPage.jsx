@@ -33,6 +33,7 @@ const EventosAlunoPage = () => {
     // recupera os dados globais do usuário
     const { userData, setUserData } = useContext(UserContext);
     const [comentario, setComentario] = useState("");
+    const [idComentario, setIdComentario] = useState(null);
 
     useEffect(() => {
         loadEventsType();
@@ -62,7 +63,6 @@ const EventosAlunoPage = () => {
                 const todosEventos = await api.get(
                     `${myEventsResource}/${userData.userId}`
                 );
-                console.log(todosEventos.data);
 
                 const arrEventos = [];
 
@@ -119,10 +119,16 @@ const EventosAlunoPage = () => {
             const promise = await api.get(
                 `${commentaryEventResource}?idUsuario=${idUsuario}&idEvento=${idEvento}}`
             );
-            console.clear();
-            console.log(promise.data.descricao);
 
-            setComentario(promise.data[0].descricao);
+           const myComm = await promise.data.filter(
+               (comm) =>
+                   comm.idEvento === idEvento && comm.idUsuario === idUsuario
+           );
+
+           setComentario(myComm.length > 0 ? myComm[0].descricao : "");
+           setIdComentario(
+               myComm.length > 0 ? myComm[0].idComentarioEvento : null
+           );
         } catch (error) {
             console.error("Erro ao carregar comentários:", error);
         }
@@ -137,7 +143,7 @@ const EventosAlunoPage = () => {
                 idEvento: idEvento
             });
 
-            if (promise.status == 200) {
+            if (promise.status === 200) {
                 alert("Comentario Cadastrado com Sucesso")
             }
         } catch (error) {
@@ -145,11 +151,14 @@ const EventosAlunoPage = () => {
         }
     };
     //remove comentário - delete
-    const commentaryRemove = async () => {
-        alert("Remover o comentário");
-
+    const commentaryRemove = async (idComentario) => {
         try {
-            const promise = await api.delete();
+            const promise = await api.delete(
+                `${commentaryEventResource}/${idComentario}`
+            );
+            if (promise.status === 200) {
+                alert("Evento excluído com sucesso");
+            }
             console.log("Comentários do usuário:", promise.data);
         } catch (error) {
             console.error("Erro ao deletar comentários:", error);
@@ -224,6 +233,8 @@ const EventosAlunoPage = () => {
                     fnPost={PostMyComentary}
                     fnDelete={commentaryRemove}
                     comentaryText={comentario}
+                    // idEvento={idEvento}
+                    idComentario={idComentario}
                 />
             ) : null}
         </>
