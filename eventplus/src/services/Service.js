@@ -11,12 +11,13 @@ export const commentaryEventResource = "/ComentariosEvento";
 
 
 
-const apiPort = "7118";
-const localApiUrl = `https://localhost:${apiPort}/api`;
-const externalApiUrl = null;
+// const apiPort = "7118";
+// const localApiUrl = `https://localhost:${apiPort}/api`;
+const externalApiUri = `https://eventwebapi-lucas.azurewebsites.net/`;
+// const externalApiUrl = null;
 
 const api = axios.create({
-    baseURL: localApiUrl,
+    baseURL: externalApiUri,
 });
 
 export default api;

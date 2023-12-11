@@ -136,7 +136,7 @@ const EventosAlunoPage = () => {
                 idUsuario: idUsuario,
                 idEvento: idEvento
             });
-
+ 
             if (promise.status == 200) {
                 alert("Comentario Cadastrado com Sucesso")
             }
