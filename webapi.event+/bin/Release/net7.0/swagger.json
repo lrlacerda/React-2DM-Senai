@@ -10,17 +10,7 @@
     "version": "v1"
   },
   "paths": {
-    "/api/ComentariosEvento": {
-      "get": {
-        "tags": [
-          "ComentariosEvento"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      },
+    "/api/ComentariosEvento/ComentarioIA": {
       "post": {
         "tags": [
           "ComentariosEvento"
@@ -39,6 +29,30 @@
               "$ref": "#/definitions/ComentariosEvento"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/ComentariosEvento": {
+      "get": {
+        "tags": [
+          "ComentariosEvento"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/ComentariosEvento/ListarSomenteExibe": {
+      "get": {
+        "tags": [
+          "ComentariosEvento"
         ],
         "responses": {
           "200": {
