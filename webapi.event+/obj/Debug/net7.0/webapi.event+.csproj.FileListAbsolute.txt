@@ -1301,3 +1301,6 @@ C:\Users\lribe\OneDrive\Área de Trabalho\React-2DM-Senai\webapi.event+\obj\Debu
 C:\Users\lribe\OneDrive\Área de Trabalho\React-2DM-Senai\webapi.event+\obj\Debug\net7.0\webapi.event+.genruntimeconfig.cache
 C:\Users\lribe\OneDrive\Área de Trabalho\React-2DM-Senai\webapi.event+\obj\Debug\net7.0\ref\webapi.event+.dll
 C:\Users\lribe\OneDrive\Área de Trabalho\React-2DM-Senai\webapi.event+\obj\Debug\net7.0\webapi.event+.sourcelink.json
+C:\Users\32784630803\Desktop\React-2DM-Senai\webapi.event+\bin\Debug\net7.0\Microsoft.Azure.CognitiveServices.ContentModerator.dll
+C:\Users\32784630803\Desktop\React-2DM-Senai\webapi.event+\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.dll
+C:\Users\32784630803\Desktop\React-2DM-Senai\webapi.event+\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.Azure.dll

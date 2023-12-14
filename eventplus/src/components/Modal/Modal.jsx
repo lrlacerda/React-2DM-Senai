@@ -34,7 +34,7 @@ const Modal = ({
                     {modalTitle}
                     <span
                         className="modal__close"
-                        onClick={() => showHideModal(idEvento)}
+                        onClick={() => showHideModal(true)}
                     >
                         x
                     </span>
@@ -46,9 +46,9 @@ const Modal = ({
                         src={trashDelete}
                         className="comentary__icon-delete"
                         alt="Ícone de uma lixeira"
-                        onClick={() => {
-                            fnDelete(idComentario);
-                            carregarDados();
+                        onClick={async() => {
+                           await fnDelete(idComentario);
+                           await carregarDados();
                         }}
                     />
 
@@ -77,8 +77,8 @@ const Modal = ({
                         } else {
                             fnPost(
                                 await comentarioDesc.trim(),
-                                userId,
-                                idEvento
+                                userData.userId,
+                                userData.idEvento
                             );
                             await carregarDados();
                         }

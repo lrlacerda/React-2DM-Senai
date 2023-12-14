@@ -3,7 +3,14 @@ import "./NextEvent.css";
 import { dateFormatDbToView } from "../../Utils/stringFunctions";
 import { Tooltip } from "react-tooltip";
 
+import { Link } from "react-router-dom";
+import Comentario from "../../pages/ComentariosEvento/ComentariosEvento";
+import { useContext } from "react";
+import { UserContext } from "../../context/AuthContext";
+
 const NextEvent = ({ title, description, eventDate, idEvent }) => {
+    const { userData } = useContext(UserContext);
+
     function conectar(idEvent) {
         alert(`Chamar o recurso para conectar: ${idEvent}`);
     }
@@ -11,12 +18,10 @@ const NextEvent = ({ title, description, eventDate, idEvent }) => {
         <article className="event-card">
             <h2 className="event-card__title">{title.substr(0, 15)}</h2>
             <p
-            className="event-card__description"
-
+                className="event-card__description"
                 data-tooltip-id={idEvent}
                 data-tooltip-content={description}
                 data-tooltip-place="top"
-                
             >
                 <Tooltip id={idEvent} className="tooltip" />
                 {description.substr(0, 15)}...
@@ -24,14 +29,28 @@ const NextEvent = ({ title, description, eventDate, idEvent }) => {
             <p className="event-card__description">
                 {dateFormatDbToView(eventDate)}
             </p>
-            <a
-                onClick={() => {
-                    conectar(idEvent);
-                }}
-                className="event-card__connect-link"
-            >
-                Conectar
-            </a>
+
+            {userData.nome && userData.role === "Administrador" ? (
+                <Link
+                    to={"/comentarios-evento-all"}
+                    onClick={() => {
+                        conectar(idEvent);
+                    }}
+                    className="event-card__connect-link"
+                >
+                    Detalhes
+                </Link>
+            ) : userData.nome && userData.role === "Comum" ? (
+                <Link
+                    to={"/comentarios-evento-only"}
+                    onClick={() => {
+                        conectar(idEvent);
+                    }}
+                    className="event-card__connect-link"
+                >
+                    Detalhes
+                </Link>
+            ) : null}
         </article>
     );
 };

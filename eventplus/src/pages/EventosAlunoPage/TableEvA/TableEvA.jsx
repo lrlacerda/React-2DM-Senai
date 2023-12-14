@@ -44,7 +44,7 @@ const Table = ({ dados, fnConnect = null, fnShowModal = null }) => {
                                 {new Date(e.dataEvento) < Date.now() ? (
                                     <img
                                         className="tbal-data__icon"
-                                        idevento={e.idEvento}
+                                        // idevento={e.idEvento}
                                         src={comentaryIcon}
                                         alt=""
                                         onClick={() => {

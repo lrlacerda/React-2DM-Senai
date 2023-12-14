@@ -10,11 +10,10 @@ import api, {
     eventsResource,
     myEventsResource,
     presencesEventResource,
-    commentaryEventResource,
+    commentaryEventResource, comentariosEventResourceIA
 } from "../../services/Service";
 import "./EventosAlunoPage.css";
 import { UserContext } from "../../context/AuthContext";
-import { wait } from "@testing-library/user-event/dist/utils";
 
 const EventosAlunoPage = () => {
     // state do menu mobile
@@ -34,6 +33,7 @@ const EventosAlunoPage = () => {
     const { userData, setUserData } = useContext(UserContext);
     const [comentario, setComentario] = useState("");
     const [idComentario, setIdComentario] = useState(null);
+     const [idEvento, setIdEvento] = useState("");
 
     useEffect(() => {
         loadEventsType();
@@ -136,7 +136,7 @@ const EventosAlunoPage = () => {
     //ler comentário - post
     const PostMyComentary = async (descricao, idUsuario, idEvento) => {
         try {
-            const promise = await api.post(commentaryEventResource, {
+            const promise = await api.post(comentariosEventResourceIA, {
                 descricao: descricao,
                 exibe: true,
                 idUsuario: idUsuario,
@@ -150,6 +150,7 @@ const EventosAlunoPage = () => {
             console.error("Erro ao postar comentários:", error);
         }
     };
+
     //remove comentário - delete
     const commentaryRemove = async (idComentario) => {
         try {
@@ -159,7 +160,6 @@ const EventosAlunoPage = () => {
             if (promise.status === 200) {
                 alert("Evento excluído com sucesso");
             }
-            console.log("Comentários do usuário:", promise.data);
         } catch (error) {
             console.error("Erro ao deletar comentários:", error);
         }
@@ -233,7 +233,7 @@ const EventosAlunoPage = () => {
                     fnPost={PostMyComentary}
                     fnDelete={commentaryRemove}
                     comentaryText={comentario}
-                    // idEvento={idEvento}
+                    idEvento={idEvento}
                     idComentario={idComentario}
                 />
             ) : null}

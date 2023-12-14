@@ -15,6 +15,12 @@
             </summary>
             <param name="optionsBuilder">Objeto com as configurações definidas</param>
         </member>
+        <member name="M:webapi.event_.Controllers.ComentariosEventoController.#ctor(Microsoft.Azure.CognitiveServices.ContentModerator.ContentModeratorClient)">
+            <summary>
+            Construtor que recebe os dados necessários para acesso ao serviço externo
+            </summary>
+            <param name="contentModeratorClient">objeto do tipo _contentModeratorClient</param>
+        </member>
         <member name="T:webapi.event_.Migrations.lucas">
             <inheritdoc />
         </member>
@@ -37,6 +43,18 @@
             <inheritdoc />
         </member>
         <member name="M:webapi.event_.Migrations.webapievent.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:webapi.event_.Migrations.eventdatabaseazure">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.event_.Migrations.eventdatabaseazure.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.event_.Migrations.eventdatabaseazure.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.event_.Migrations.eventdatabaseazure.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

@@ -10,6 +10,7 @@ import TipoEventosPages from "../pages/TipoEventosPage/TipoEventosPages";
 import Footer from "../components/Footer/Footer";
 import { PrivateRoute } from "./PrivateRoute";
 import EventosAlunoPage from "../pages/EventosAlunoPage/EventosAlunoPage";
+import Comentario from "../pages/ComentariosEvento/ComentariosEvento.jsx";
 
 const Rotas = () => {
     return (
@@ -41,6 +42,23 @@ const Rotas = () => {
                     element={
                         <PrivateRoute redirectTo="/">
                             <EventosAlunoPage />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path="/comentarios-evento-all"
+                    element={
+                        <PrivateRoute redirectTo="/">
+                            <Comentario />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/comentarios-evento-only"
+                    element={
+                        <PrivateRoute redirectTo="/">
+                            <Comentario />
                         </PrivateRoute>
                     }
                 />
