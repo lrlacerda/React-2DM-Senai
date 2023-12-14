@@ -8,7 +8,7 @@ export const myEventsResource = "/PresencaEvento/ListarMinhas";
 export const presencesEventResource = "/PresencaEvento";
 export const loginResource = "/Login";
 export const commentaryEventResource = "/ComentariosEvento";
-export const commentaryEventResourceIA = "/ComentariosEvento/ComentarioIA";
+export const detalhesEvento = "/DetalhesEvento"
 
 
 

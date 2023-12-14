@@ -78,11 +78,11 @@ namespace webapi.event_.Controllers
         }
 
         [HttpGet("ListarSomenteExibe")]
-        public IActionResult getShow()
+        public IActionResult getExibe(Guid id)
         {
             try
             {
-                return Ok(comentario.ListarSomenteExibe());
+                return Ok(comentario.ListarSomenteExibe(id));
             }
             catch (Exception ex)
             {

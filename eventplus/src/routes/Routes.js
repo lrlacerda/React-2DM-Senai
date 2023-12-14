@@ -10,7 +10,8 @@ import TipoEventosPages from "../pages/TipoEventosPage/TipoEventosPages";
 import Footer from "../components/Footer/Footer";
 import { PrivateRoute } from "./PrivateRoute";
 import EventosAlunoPage from "../pages/EventosAlunoPage/EventosAlunoPage";
-import Comentario from "../pages/ComentariosEvento/ComentariosEvento.jsx";
+import Comentario from "../pages/ComentariosEvento/ComentariosEvento";
+import DetalhesEvento from "../pages/DetalhesEvento/DetalhesEvento";
 
 const Rotas = () => {
     return (
@@ -64,7 +65,8 @@ const Rotas = () => {
                 />
 
                 <Route element={<LoginPage />} path={"/login"} />
-                <Route element={<TestePage />} path={"/testes"} />
+                <Route element={<TestePage />} path={"/teste/:idEvento"} />
+                <Route element={<DetalhesEvento />} path={"/detalhesEvento"} />
             </Routes>
             <Footer />
         </BrowserRouter>

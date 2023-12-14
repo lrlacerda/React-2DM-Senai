@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import MainContent from "../../components/MainContent/MainContent";
 import Title from "../../components/Titulo/Title";
-import Table from "./TableEvA/TableEvA";
+import Table from "../EventosAlunoPage/TableEvA/TableEvA";
 import Container from "../../components/Container/Container";
 import { Select } from "../../components/FormComponents/FormComponents";
 import Spinner from "../../components/Spinner/Spinner";
@@ -12,10 +12,10 @@ import api, {
     presencesEventResource,
     commentaryEventResource
 } from "../../services/Service";
-import "./EventosAlunoPage.css";
+import "./DetalhesEvento.css";
 import { UserContext } from "../../context/AuthContext";
 
-const EventosAlunoPage = () => {
+const DetalhesEvento = () => {
     // state do menu mobile
     const [exibeNavbar, setExibeNavbar] = useState(false);
     const [eventos, setEventos] = useState([]);
@@ -242,4 +242,4 @@ const EventosAlunoPage = () => {
     );
 };
 
-export default EventosAlunoPage;
+export default DetalhesEvento;

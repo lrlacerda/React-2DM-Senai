@@ -54,6 +54,15 @@
         "tags": [
           "ComentariosEvento"
         ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "string",
+            "format": "uuid",
+            "collectionFormat": "multi"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"

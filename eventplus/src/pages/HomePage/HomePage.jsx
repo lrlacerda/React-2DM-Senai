@@ -44,6 +44,7 @@ const HomePage = () => {
 
     return (
         <MainContent>
+            {/* <Link to={`/teste/${e.idEvento}`}>Visualizar</Link> */}
             {<Notification {...notifyUser} setNotifyUser={setNotifyUser} />}
             <Banner />
             <section className="proximos-eventos">
