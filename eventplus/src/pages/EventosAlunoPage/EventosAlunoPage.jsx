@@ -10,7 +10,8 @@ import api, {
     eventsResource,
     myEventsResource,
     presencesEventResource,
-    commentaryEventResource
+    commentaryEventResource,
+    commentaryEventResourceIA,
 } from "../../services/Service";
 import "./EventosAlunoPage.css";
 import { UserContext } from "../../context/AuthContext";
@@ -136,7 +137,7 @@ const EventosAlunoPage = () => {
     //ler comentário - post
     const postMyCommentary = async (descricao, idUsuario, idEvento) => {
         try {
-          const promise = await api.post(commentaryEventResource, {
+          const promise = await api.post(commentaryEventResourceIA, {
             descricao: descricao,
             exibe: true,
             idUsuario: idUsuario,

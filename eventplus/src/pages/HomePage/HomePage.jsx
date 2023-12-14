@@ -10,13 +10,15 @@ import NextEvent from "../../components/NextEvent/NextEvent";
 import Container from "../../components/Container/Container";
 import Notification from "../../components/Notification/Notification";
 
-import api from "../../services/Service";
+import api, { pastEventsResource } from "../../services/Service";
+import PastEvents from "../../components/PastEvents/PastEvents";
 
 import { nextEventResource } from "../../services/Service";
 
 const HomePage = () => {
     //dados mocados
     const [nextEvents, setnextEvents] = useState([]);
+    const [pastEvents, setPastEvents] = useState([]);
     const [notifyUser, setNotifyUser] = useState();
 
     //roda somente na inicialização do componente
@@ -39,6 +41,18 @@ const HomePage = () => {
             }
         }
 
+        async function getPastEvents() {
+            try {
+                const promise = await api.get(pastEventsResource);
+                const dados = await promise.data;
+                setPastEvents(dados);
+            } catch (error) {
+                console.log("Deu erro na api");
+            }
+        }
+
+        getPastEvents();
+
         getNextEvents(); //doda a função
     }, []);
 
@@ -59,6 +73,27 @@ const HomePage = () => {
                                     description={e.descricao}
                                     eventDate={e.dataEvento}
                                     idEvent={e.idEvento}
+                                />
+                            );
+                        })}
+                    </div>
+                </Container>
+            </section>
+
+            <section className="proximos-eventos">
+                <Container>
+                    <Title titleText={"Eventos Anteriores"} />
+                    <div className="events-box">
+                        {pastEvents.map((e) => {
+                            return (
+                                <PastEvents
+                                    key={e.idEvento}
+                                    title={e.nomeEvento}
+                                    description={e.descricao}
+                                    eventDate={e.dataEvento}
+                                    idEvent={e.idEvento}
+                                    buttonLink={`/detalhes-evento/${e.idEvento}`}
+                                    buttonText={"Visualizar"}
                                 />
                             );
                         })}

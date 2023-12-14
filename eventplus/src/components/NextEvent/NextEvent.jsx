@@ -4,7 +4,6 @@ import { dateFormatDbToView } from "../../Utils/stringFunctions";
 import { Tooltip } from "react-tooltip";
 
 import { Link } from "react-router-dom";
-import Comentario from "../../pages/ComentariosEvento/ComentariosEvento";
 import { useContext } from "react";
 import { UserContext } from "../../context/AuthContext";
 
@@ -16,7 +15,7 @@ const NextEvent = ({ title, description, eventDate, idEvent }) => {
     }
     return (
         <article className="event-card">
-            <h2 className="event-card__title">{title.substr(0, 15)}</h2>
+            <h2 className="event-card__title">{title}</h2>
             <p
                 className="event-card__description"
                 data-tooltip-id={idEvent}
@@ -48,7 +47,7 @@ const NextEvent = ({ title, description, eventDate, idEvent }) => {
                     }}
                     className="event-card__connect-link"
                 >
-                    Detalhes
+                    Conectar
                 </Link>
             ) : null}
         </article>

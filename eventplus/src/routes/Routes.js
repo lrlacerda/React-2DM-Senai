@@ -20,6 +20,8 @@ const Rotas = () => {
             <Routes>
                 <Route element={<HomePage />} path={"/"} exact />
 
+                <Route element={<DetalhesEvento />} path={"/detalhesEvento"} />
+
                 <Route
                     path={"/tipo-eventos"}
                     element={
@@ -66,7 +68,6 @@ const Rotas = () => {
 
                 <Route element={<LoginPage />} path={"/login"} />
                 <Route element={<TestePage />} path={"/teste/:idEvento"} />
-                <Route element={<DetalhesEvento />} path={"/detalhesEvento"} />
             </Routes>
             <Footer />
         </BrowserRouter>

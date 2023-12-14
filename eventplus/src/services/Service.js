@@ -9,6 +9,8 @@ export const presencesEventResource = "/PresencaEvento";
 export const loginResource = "/Login";
 export const commentaryEventResource = "/ComentariosEvento";
 export const detalhesEvento = "/DetalhesEvento"
+export const pastEventsResource = "/Evento/ListarAnteriores";
+export const commentaryEventResourceIA = "/ComentariosEvento/ComentarioIA";
 
 
 
