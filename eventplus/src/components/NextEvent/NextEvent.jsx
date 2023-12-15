@@ -29,7 +29,7 @@ const NextEvent = ({ title, description, eventDate, idEvent }) => {
                 {dateFormatDbToView(eventDate)}
             </p>
 
-            {userData.nome && userData.role === "Administrador" ? (
+            {userData.nome && userData.role === "administrador" ? (
                 <Link
                     to={"/comentarios-evento-all"}
                     onClick={() => {
@@ -39,7 +39,7 @@ const NextEvent = ({ title, description, eventDate, idEvent }) => {
                 >
                     Detalhes
                 </Link>
-            ) : userData.nome && userData.role === "Comum" ? (
+            ) : userData.nome && userData.role === "usuario" ? (
                 <Link
                     to={"/comentarios-evento-only"}
                     onClick={() => {
@@ -50,6 +50,7 @@ const NextEvent = ({ title, description, eventDate, idEvent }) => {
                     Conectar
                 </Link>
             ) : null}
+
         </article>
     );
 };

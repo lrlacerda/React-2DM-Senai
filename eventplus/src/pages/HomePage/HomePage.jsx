@@ -10,10 +10,9 @@ import NextEvent from "../../components/NextEvent/NextEvent";
 import Container from "../../components/Container/Container";
 import Notification from "../../components/Notification/Notification";
 
-import api, { pastEventsResource } from "../../services/Service";
 import PastEvents from "../../components/PastEvents/PastEvents";
 
-import { nextEventResource } from "../../services/Service";
+import api, { nextEventResource, pastEventsResource } from "../../services/Service";
 
 const HomePage = () => {
     //dados mocados
@@ -41,6 +40,8 @@ const HomePage = () => {
             }
         }
 
+        getNextEvents(); //doda a função
+
         async function getPastEvents() {
             try {
                 const promise = await api.get(pastEventsResource);
@@ -53,7 +54,6 @@ const HomePage = () => {
 
         getPastEvents();
 
-        getNextEvents(); //doda a função
     }, []);
 
     return (
@@ -73,6 +73,8 @@ const HomePage = () => {
                                     description={e.descricao}
                                     eventDate={e.dataEvento}
                                     idEvent={e.idEvento}
+                                    buttonLink={`/detalhes-evento/${e.idEvento}`}
+                                    buttonText={"Visualizar"}
                                 />
                             );
                         })}

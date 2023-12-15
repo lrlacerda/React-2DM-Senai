@@ -75,8 +75,8 @@ const Modal = ({
                                 "Já existe um comentário cadastrado para o evento."
                             );
                         } else {
-                            fnPost(
-                                await comentarioDesc.trim(),
+                           await fnPost(
+                                comentarioDesc.trim(),
                                 userData.userId,
                                 userData.idEvento
                             );

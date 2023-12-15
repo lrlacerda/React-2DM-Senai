@@ -42,7 +42,7 @@ const EventosAlunoPage = () => {
 
     async function loadEventsType() {
         setShowSpinner(true);
-        setEventos([]); //zera array de eventos
+        // setEventos([]); //zera array de eventos
 
         if (tipoEvento === "1") {
             try {
@@ -61,13 +61,13 @@ const EventosAlunoPage = () => {
             }
         } else if (tipoEvento === "2") {
             try {
-                const todosEventos = await api.get(
+                const retornoEventos = await api.get(
                     `${myEventsResource}/${userData.userId}`
                 );
 
                 const arrEventos = [];
 
-                todosEventos.data.forEach((e) => {
+                retornoEventos.data.forEach((e) => {
                     arrEventos.push({
                         ...e.evento,
                         situacao: e.situacao,
@@ -95,7 +95,7 @@ const EventosAlunoPage = () => {
                 ) {
                     arrAllEvents[x].situacao = true;
                     arrAllEvents[x].idPresencaEvento =
-                        eventsUser[i].idPresencaEvento;
+                        eventsUser[i].idPresencaEvento = eventsUser[i].idPresencaEvento;
                     break; //para de procurar para o evento principal atual
                 }
             }
