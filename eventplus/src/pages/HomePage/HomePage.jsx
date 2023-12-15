@@ -40,8 +40,6 @@ const HomePage = () => {
             }
         }
 
-        getNextEvents(); //doda a função
-
         async function getPastEvents() {
             try {
                 const promise = await api.get(pastEventsResource);
@@ -51,7 +49,7 @@ const HomePage = () => {
                 console.log("Deu erro na api");
             }
         }
-
+        getNextEvents(); //doda a função
         getPastEvents();
 
     }, []);
@@ -73,7 +71,7 @@ const HomePage = () => {
                                     description={e.descricao}
                                     eventDate={e.dataEvento}
                                     idEvent={e.idEvento}
-                                    buttonLink={`/detalhes-evento/${e.idEvento}`}
+                                    buttonLink={`/detalhesEvento/${e.idEvento}`}
                                     buttonText={"Visualizar"}
                                 />
                             );
@@ -94,7 +92,7 @@ const HomePage = () => {
                                     description={e.descricao}
                                     eventDate={e.dataEvento}
                                     idEvent={e.idEvento}
-                                    buttonLink={`/detalhes-evento/${e.idEvento}`}
+                                    buttonLink={`/detalhesEvento/${e.idEvento}`}
                                     buttonText={"Visualizar"}
                                 />
                             );

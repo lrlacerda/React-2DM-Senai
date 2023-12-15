@@ -2,7 +2,7 @@ import React from "react";
 import "./PastEvents.css";
 import { Tooltip } from "react-tooltip";
 import { dateFormatDbToView } from "../../Utils/stringFunctions";
-import EventosAnterioresAlunoPage from "../../pages/DetalhesEvento/DetalhesEvento";
+
 import { Link, Route } from "react-router-dom";
 
 
